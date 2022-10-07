@@ -1,0 +1,27 @@
+{
+  "name": "wedding-website",
+  "version": "1.0.0",
+  "description": "website for wedding plan template",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run build && nodemon --exec babel-node src/index.js",
+    "build": "babel src -d dist",
+    "serve": "node dist/index.js"
+  },
+  "author": "Jacob Elbaz",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.19.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "mongodb": "^4.9.1",
+    "nodemon": "^2.0.19"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.0",
+    "@babel/node": "^7.18.10",
+    "@babel/preset-env": "^7.19.0"
+  }
+}
