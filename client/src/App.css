@@ -38,9 +38,9 @@
 }
 
 .copyright {
+  text-align: center;
   color: dimgray;
   padding-top: 10px;
-  padding-left: 50px;
   padding-bottom: 10px;
-  background-color: #282828;
+  background-color:white;
 }
