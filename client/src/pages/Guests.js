@@ -3,7 +3,6 @@ import { Table, Modal, Button, Form } from 'react-bootstrap'
 import { useAppContext } from '../context';
 import editpic from '../images/editer.png'
 import supprimer from '../images/supprimer.png'
-import sort from '../images/sort.png'
 
 export default function Guests() {
     const { guests, editGuest, deleteGuest, addGuest } = useAppContext();
