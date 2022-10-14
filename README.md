@@ -12,7 +12,7 @@ As guest:
 - Whatsapp link to contact the organizer
 - Answer form
 
-As organizer:
+As organizer (password: 12345):
 - Access the guests list 
 - Search guest by name/phone
 - Add new guest 
