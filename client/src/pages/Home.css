@@ -154,7 +154,3 @@ body.modal-open > :not(.modal) {
     width: 20px;
     height: 20px;
 }
-
-.btn-edit {
-    margin-right: 5px;
-}

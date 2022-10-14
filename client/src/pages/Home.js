@@ -46,7 +46,7 @@ export default function Home() {
                 <h1>The Wedding</h1>
                 <img src={carte} alt="carte" />
                 <a href="https://ul.waze.com/ul?preview_venue_id=23003454.229837931.6121&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location" target={"_blank"}>Waze</a>
-                <a href='https://wa.me/972545477267' target={"_blank"}>Whatsapp</a>
+                <a href='https://wa.me/972503013489' target={"_blank"}>Whatsapp</a>
             </div>
             
             <div className='d1' id='answer'>
@@ -82,7 +82,7 @@ export default function Home() {
                 </Modal.Header>
                 <Modal.Body>You can modify your answer by filling out this form again, entering the same phone number.</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button onClick={handleClose}>
                         OK
                     </Button>
                 </Modal.Footer>

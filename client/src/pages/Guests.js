@@ -3,6 +3,7 @@ import { Table, Modal, Button, Form } from 'react-bootstrap'
 import { useAppContext } from '../context';
 import editpic from '../images/editer.png'
 import supprimer from '../images/supprimer.png'
+import sort from '../images/sort.png'
 
 export default function Guests() {
     const { guests, editGuest, deleteGuest, addGuest } = useAppContext();
@@ -59,21 +60,21 @@ export default function Guests() {
     return (
         <div>
             <h1>My Guests List</h1>
+            <div className='text-center'><small className='text-muted'>Confirmations: <strong>{total}</strong></small></div>
+            <hr/>
             <div id='searchBar'>
-                <div><label htmlFor="" className='mx-2'>Search:</label>
-                    <input type="text" onChange={onChangeHandler} placeholder='Name/Phone' />
-                </div>
                 <div>
-                    <label htmlFor="" className='mx-2'>Confirmations: <strong>{total}</strong></label>
+                    <input type="search" className='form-control mb-2' onChange={onChangeHandler} placeholder='Search' />
                 </div>
+                <div><button className='btn btn-primary' onClick={() => {setUpdatedGuest(null);setShowAdd(true)}}>+Add new guest</button></div>
             </div>
-            <Table striped bordered hover>
+            <Table striped hover>
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Phone</th>
-                        <th>Confirmations</th>
-                        <th><button className='btn btn-primary btn-sm' onClick={() => {setUpdatedGuest(null);setShowAdd(true)}}>+Add</button></th>
+                        <th>Comming</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -85,7 +86,7 @@ export default function Guests() {
                                     <td>{guest.name}</td>
                                     <td>{guest.phone}</td>
                                     <td>{guest.numberOfGuests}</td>
-                                    <td><button className='btn btn-secondary btn-sm btn-edit' onClick={() => {setUpdatedGuest(guest); setShowEdit(true)}}><img src={editpic} alt='' style={{width: "20px", filter: "invert(1)", opacity: "0.9"}}/></button></td>
+                                    <td><button className='btn btn-secondary btn-sm' onClick={() => {setUpdatedGuest(guest); setShowEdit(true)}}><img src={editpic} alt='' style={{width: "20px", opacity:'0.6'}}/></button></td>
                                 </tr>
                             )
                         })) :
@@ -97,7 +98,7 @@ export default function Guests() {
                                         <td>{guest.name}</td>
                                         <td>{guest.phone}</td>
                                         <td>{guest.numberOfGuests}</td>
-                                        <td><button className='btn btn-secondary btn-sm btn-edit' onClick={() => {setUpdatedGuest(guest); setShowEdit(true)}}><img src={editpic} alt='' style={{width: "20px", filter: "invert(1)", opacity: "0.9"}}/></button></td>
+                                        <td><button className='btn btn-outline btn-sm' onClick={() => {setUpdatedGuest(guest); setShowEdit(true)}}><img src={editpic} alt='' style={{width: "20px", opacity:'0.6'}}/></button></td>
                                     </tr>
                                 )
                             })
@@ -107,6 +108,7 @@ export default function Guests() {
                         <td>TOTAL</td>
                         <td></td>
                         <td>{_total}</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </Table>
