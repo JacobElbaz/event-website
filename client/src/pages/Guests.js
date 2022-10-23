@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Modal, Button, Form } from 'react-bootstrap'
+import { Table, Modal, Button, Form, ButtonGroup } from 'react-bootstrap'
 import { useAppContext } from '../context';
+import { CSVLink } from 'react-csv'
+import * as xlsx from 'xlsx'
 import editpic from '../images/editer.png'
 import supprimer from '../images/supprimer.png'
+import example from '../images/example.png'
 
 export default function Guests() {
     const { guests, editGuest, deleteGuest, addGuest } = useAppContext();
@@ -12,6 +15,8 @@ export default function Guests() {
     const [showEdit, setShowEdit] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
+    const [showImport, setShowImport] = useState(false);
+    const [imported, setImported] = useState(null);
     const [updatedGuest, setUpdatedGuest] = useState(null);
     const [password, setPassword] = useState(null);
     let _total = 0;
@@ -51,6 +56,43 @@ export default function Guests() {
         addGuest(guest);
         setShowAdd(false);
     }
+
+    const headers = [
+        { label: 'Name', key: 'name' },
+        { label: 'Phone', key: 'phone' },
+        { label: 'Number', key: 'numberOfGuests' }
+    ]
+
+    const csvReport = {
+        data: guests,
+        headers: headers,
+        filename: 'guests-list.csv',
+        className: 'btn btn-outline-success btn-sm'
+    }
+
+    const readUploadFile = (e) => {
+        e.preventDefault();
+        if (e.target.files) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = e.target.result;
+                const workbook = xlsx.read(data, { type: "array" });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const json = xlsx.utils.sheet_to_json(worksheet).filter(guest => !guests.some(g => g.phone == guest.phone) && guest.phone && guest.name);
+                const toImport = json.map(guest => guest = { name: guest.name, phone: guest.phone, numberOfGuests: '0' })
+                setImported(toImport);
+                console.log(toImport);
+            };
+            reader.readAsArrayBuffer(e.target.files[0]);
+        }
+    }
+
+    const importList = (imported) => {
+        const newGuests = [...imported]
+        newGuests.forEach(guest => addGuest(guest))
+    }
+
     useEffect(() => {
         setList(guests.filter(guest => guest.name.toLowerCase().includes(input.toLowerCase()) || guest.phone.includes(input)));
         setTotal(guests.reduce((prev, curr) => prev + parseInt(curr.numberOfGuests), 0));
@@ -60,14 +102,23 @@ export default function Guests() {
         <div>
             <h1>My Guests List</h1>
             <div className='text-center'><small className='text-muted'>Confirmations: <strong>{total}</strong></small></div>
-            <hr/>
+            <hr />
             <div id='searchBar'>
-                <div>
+                <div className='buttongroup m-1'>
+                    <ButtonGroup>
+                        <button className='btn btn-primary btn-sm' onClick={() => { setUpdatedGuest(null); setShowAdd(true) }}>+Add</button>
+                        <CSVLink {...csvReport}>
+                        Download
+                        </CSVLink>
+                        <button className='btn btn-outline-secondary btn-sm' onClick={() => {setShowImport(true)}}>Import</button>
+                    </ButtonGroup>
+                </div>
+                <div className='m-1'>
                     <input type="search" className='form-control mb-2' onChange={onChangeHandler} placeholder='Search' />
                 </div>
-                <div><button className='btn btn-primary' onClick={() => {setUpdatedGuest(null);setShowAdd(true)}}>+Add new guest</button></div>
             </div>
-            <Table striped hover>
+            <div className='m-1 text-sm'>
+            <Table striped hover bordered>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -85,7 +136,7 @@ export default function Guests() {
                                     <td>{guest.name}</td>
                                     <td>{guest.phone}</td>
                                     <td>{guest.numberOfGuests}</td>
-                                    <td><button className='btn btn-secondary btn-sm' onClick={() => {setUpdatedGuest(guest); setShowEdit(true)}}><img src={editpic} alt='' style={{width: "20px", opacity:'0.6'}}/></button></td>
+                                    <td><button className='btn btn-secondary btn-sm' onClick={() => { setUpdatedGuest(guest); setShowEdit(true) }}><img src={editpic} alt='' style={{ width: "20px", opacity: '0.6' }} /></button></td>
                                 </tr>
                             )
                         })) :
@@ -97,7 +148,7 @@ export default function Guests() {
                                         <td>{guest.name}</td>
                                         <td>{guest.phone}</td>
                                         <td>{guest.numberOfGuests}</td>
-                                        <td><button className='btn btn-outline btn-sm' onClick={() => {setUpdatedGuest(guest); setShowEdit(true)}}><img src={editpic} alt='' style={{width: "20px", opacity:'0.6'}}/></button></td>
+                                        <td><button className='btn btn-outline btn-sm' onClick={() => { setUpdatedGuest(guest); setShowEdit(true) }}><img src={editpic} alt='' style={{ width: "20px", opacity: '0.6' }} /></button></td>
                                     </tr>
                                 )
                             })
@@ -111,7 +162,7 @@ export default function Guests() {
                     </tr>
                 </tbody>
             </Table>
-
+            </div>
             <Modal show={showLogin} onHide={handleBack} dialogClassName='dialog'>
                 <Modal.Header closeButton>
                     <Modal.Title>Please authenticate:</Modal.Title>
@@ -134,7 +185,7 @@ export default function Guests() {
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showEdit} onHide={() => {setShowEdit(false)}}>
+            <Modal show={showEdit} onHide={() => { setShowEdit(false) }}>
                 <Modal.Header closeButton>
                     Edit Contact
                 </Modal.Header>
@@ -142,26 +193,26 @@ export default function Guests() {
                     <Form>
                         <Form.Group>
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type='text' value={updatedGuest?.name} onChange={(e) => {setUpdatedGuest({...updatedGuest, name: e.target.value})}}></Form.Control>
+                            <Form.Control type='text' value={updatedGuest?.name} onChange={(e) => { setUpdatedGuest({ ...updatedGuest, name: e.target.value }) }}></Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Phone</Form.Label>
-                            <Form.Control type='text' value={updatedGuest?.phone} onChange={(e) => {setUpdatedGuest({...updatedGuest, phone: e.target.value})}}></Form.Control>
+                            <Form.Control type='text' value={updatedGuest?.phone} onChange={(e) => { setUpdatedGuest({ ...updatedGuest, phone: e.target.value }) }}></Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Number of people</Form.Label>
-                            <Form.Control type='number' value={updatedGuest?.numberOfGuests} onChange={(e) => {setUpdatedGuest({...updatedGuest, numberOfGuests: e.target.value})}}></Form.Control>
+                            <Form.Control type='number' value={updatedGuest?.numberOfGuests} onChange={(e) => { setUpdatedGuest({ ...updatedGuest, numberOfGuests: e.target.value }) }}></Form.Control>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <button className='btn btn-danger btn-edit' onClick={() => {setShowDelete(true)}}><img src={supprimer} alt='' style={{width: "20px", filter: "invert(1)", opacity: "0.9"}}/></button>
-                    <Button variant="secondary" onClick={() => {setShowEdit(false)}}>Back</Button>
-                    <Button variant="primary" onClick={() => {edit(updatedGuest)}}>Edit</Button>
+                    <button className='btn btn-danger btn-edit' onClick={() => { setShowDelete(true) }}><img src={supprimer} alt='' style={{ width: "20px", filter: "invert(1)", opacity: "0.9" }} /></button>
+                    <Button variant="secondary" onClick={() => { setShowEdit(false) }}>Back</Button>
+                    <Button variant="primary" onClick={() => { edit(updatedGuest) }}>Edit</Button>
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showDelete} onHide={() => {setShowDelete(false)}}>
+            <Modal show={showDelete} onHide={() => { setShowDelete(false) }}>
                 <Modal.Header closeButton>
                     Delete Contact
                 </Modal.Header>
@@ -169,12 +220,12 @@ export default function Guests() {
                     Are you sure you want to delete this guest's reply?
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => {setShowDelete(false)}}>Back</Button>
-                    <Button variant="danger" onClick={() => {delete_guest(updatedGuest)}}>Yes, permanently delete.</Button>
+                    <Button variant="secondary" onClick={() => { setShowDelete(false) }}>Back</Button>
+                    <Button variant="danger" onClick={() => { delete_guest(updatedGuest) }}>Yes, permanently delete.</Button>
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showAdd} onHide={() => {setShowAdd(false)}}>
+            <Modal show={showAdd} onHide={() => { setShowAdd(false) }}>
                 <Modal.Header closeButton>
                     Add Contact
                 </Modal.Header>
@@ -182,21 +233,37 @@ export default function Guests() {
                     <Form>
                         <Form.Group>
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type='text' placeholder='Nom' onChange={(e) => {setUpdatedGuest({...updatedGuest, name: e.target.value})}} required></Form.Control>
+                            <Form.Control type='text' placeholder='Name' onChange={(e) => { setUpdatedGuest({ ...updatedGuest, name: e.target.value }) }} required></Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Phone</Form.Label>
-                            <Form.Control type='text' placeholder='Numéro de téléphone' onChange={(e) => {setUpdatedGuest({...updatedGuest, phone: e.target.value})}} required></Form.Control>
+                            <Form.Control type='text' placeholder='050-000-0000' onChange={(e) => { setUpdatedGuest({ ...updatedGuest, phone: e.target.value }) }} required></Form.Control>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Number of people</Form.Label>
-                            <Form.Control type='text' placeholder='Nombre' onChange={(e) => {setUpdatedGuest({...updatedGuest, numberOfGuests: e.target.value})}} required></Form.Control>
+                            <Form.Control type='text' placeholder='0' onChange={(e) => { setUpdatedGuest({ ...updatedGuest, numberOfGuests: e.target.value }) }} required></Form.Control>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => {setShowAdd(false)}}>Cancel</Button>
-                    <Button variant="primary" onClick={() => {addNewGuest(updatedGuest)}} disabled={!(updatedGuest?.name && updatedGuest?.phone && updatedGuest?.numberOfGuests)}>Add</Button>
+                    <Button variant="secondary" onClick={() => { setShowAdd(false) }}>Cancel</Button>
+                    <Button variant="primary" onClick={() => { addNewGuest(updatedGuest) }} disabled={!(updatedGuest?.name && updatedGuest?.phone && updatedGuest?.numberOfGuests)}>Add</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showImport} onHide={() => { setShowImport(false) }}>
+                <Modal.Header closeButton>
+                    Import List
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Make sure that the headers names of the file are 'name' and 'phone' like that:</p>
+                    <img className='w-100' src={example} alt="example" />
+                    <label>Choose a file (xlsx, xls, csv)</label>
+                    <input className='form-control' type="file" accept='.xls, .xlsx, .csv' name='upload' onChange={readUploadFile}/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => { setShowImport(false) }}>Back</Button>
+                    <Button variant="primary" onClick={() => { importList(imported) }}>Import</Button>
                 </Modal.Footer>
             </Modal>
         </div>

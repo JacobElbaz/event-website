@@ -24,6 +24,22 @@
     .carte {
         align-items: center;
     }
+    #searchBar {
+        display: flex;
+        justify-content: space-between;
+    }
+    .buttongroup {
+        order: 2;
+    }
+}
+
+.buttongroup {
+    text-align: end;
+}
+@media (max-width: 480px){
+.text-sm {
+    font-size: small;
+}
 }
 
 .carte {
@@ -119,12 +135,6 @@
 #info {
     margin-top: 5px;
     font-size: small;
-}
-
-#searchBar {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
 }
 
 body.modal-open > :not(.modal) {
