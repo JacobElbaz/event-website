@@ -17,6 +17,7 @@ As organizer (password: 12345):
 - Search guest by name/phone
 - Add new guest 
 - Edit/remove guest
+- Import/Export guest list (new)
 
 ## Tech Stack
 
