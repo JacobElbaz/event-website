@@ -18,7 +18,15 @@ export default function Home() {
         setShow(false);
     }
     const handleOnChange = e => {
-        setGuest({ ...guest, [e.target.name]: e.target.value })
+        var value = e.target.value;
+        if(e.target.name == 'name'){
+            const arr = value.split(" ");
+            for (var i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+            }
+            value = arr.join(" ");
+        }
+        setGuest({ ...guest, [e.target.name]: value })
     }
     const handleOnSubmit = e => {
         e.preventDefault();
@@ -55,7 +63,7 @@ export default function Home() {
                     <Form onSubmit={handleOnSubmit}>
                         <Form.Group className="mb-3" controlId="formBasicPhone">
                             <Form.Label>Name</Form.Label>
-                            <Form.Control name='name' ref={nameRef} type="text" className='tel' placeholder="Lewis Hamilton" onChange={handleOnChange} required />
+                            <Form.Control name='name' ref={nameRef} type="text" className='tel text-capitalize' placeholder="Lewis Hamilton" onChange={handleOnChange} required />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicPhone">
                             <Form.Label>Phone</Form.Label>

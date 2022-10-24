@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Table, Modal, Button, Form, ButtonGroup } from 'react-bootstrap'
 import { useAppContext } from '../context';
-import { CSVLink } from 'react-csv'
 import * as xlsx from 'xlsx'
 import editpic from '../images/editer.png'
 import supprimer from '../images/supprimer.png'
@@ -19,6 +18,8 @@ export default function Guests() {
     const [imported, setImported] = useState(null);
     const [updatedGuest, setUpdatedGuest] = useState(null);
     const [password, setPassword] = useState(null);
+    const [errorFormat, setErrorFormat] = useState(null);
+    const [file, setFile] = useState(false);
     let _total = 0;
     const [total, setTotal] = useState(_total);
     const handleBack = () => {
@@ -57,17 +58,12 @@ export default function Guests() {
         setShowAdd(false);
     }
 
-    const headers = [
-        { label: 'Name', key: 'name' },
-        { label: 'Phone', key: 'phone' },
-        { label: 'Number', key: 'numberOfGuests' }
-    ]
-
-    const csvReport = {
-        data: guests,
-        headers: headers,
-        filename: 'guests-list.csv',
-        className: 'btn btn-outline-success btn-sm'
+    const handleOnExport = () => {
+        const wb = xlsx.utils.book_new();
+        const filtered = guests.map(({name, phone, numberOfGuests}) => ({name, phone, numberOfGuests}));
+        const ws = xlsx.utils.json_to_sheet(filtered);
+        xlsx.utils.book_append_sheet(wb, ws, "Guests");
+        xlsx.writeFile(wb, "MyGuestList.xlsx");
     }
 
     const readUploadFile = (e) => {
@@ -80,17 +76,22 @@ export default function Guests() {
                 const sheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[sheetName];
                 const json = xlsx.utils.sheet_to_json(worksheet).filter(guest => !guests.some(g => g.phone == guest.phone) && guest.phone && guest.name);
-                const toImport = json.map(guest => guest = { name: guest.name, phone: guest.phone, numberOfGuests: '0' })
+                const toImport = json.map(guest => guest = { name: guest.name.toString(), phone: guest.phone.toString(), numberOfGuests: '0' })
                 setImported(toImport);
                 console.log(toImport);
+                if (toImport.length == 0) {
+                    setErrorFormat('Please check file format.')
+                } else {setErrorFormat(null)}
             };
             reader.readAsArrayBuffer(e.target.files[0]);
+            setFile(true);
         }
     }
 
     const importList = (imported) => {
         const newGuests = [...imported]
         newGuests.forEach(guest => addGuest(guest))
+        setShowImport(false)
     }
 
     useEffect(() => {
@@ -107,9 +108,7 @@ export default function Guests() {
                 <div className='buttongroup m-1'>
                     <ButtonGroup>
                         <button className='btn btn-primary btn-sm' onClick={() => { setUpdatedGuest(null); setShowAdd(true) }}>+Add</button>
-                        <CSVLink {...csvReport}>
-                        Download
-                        </CSVLink>
+                        <button className='btn btn-outline-success btn-sm' onClick={handleOnExport}>Download</button>
                         <button className='btn btn-outline-secondary btn-sm' onClick={() => {setShowImport(true)}}>Import</button>
                     </ButtonGroup>
                 </div>
@@ -136,7 +135,7 @@ export default function Guests() {
                                     <td>{guest.name}</td>
                                     <td>{guest.phone}</td>
                                     <td>{guest.numberOfGuests}</td>
-                                    <td><button className='btn btn-secondary btn-sm' onClick={() => { setUpdatedGuest(guest); setShowEdit(true) }}><img src={editpic} alt='' style={{ width: "20px", opacity: '0.6' }} /></button></td>
+                                    <td><button className='btn btn-outline btn-sm' onClick={() => { setUpdatedGuest(guest); setShowEdit(true) }}><img src={editpic} alt='' style={{ width: "20px", opacity: '0.6' }} /></button></td>
                                 </tr>
                             )
                         })) :
@@ -259,11 +258,12 @@ export default function Guests() {
                     <p>Make sure that the headers names of the file are 'name' and 'phone' like that:</p>
                     <img className='w-100' src={example} alt="example" />
                     <label>Choose a file (xlsx, xls, csv)</label>
-                    <input className='form-control' type="file" accept='.xls, .xlsx, .csv' name='upload' onChange={readUploadFile}/>
+                    <input className={`form-control ${errorFormat && "error-input"}`} id='file' type="file" accept='.xls, .xlsx, .csv' name='upload' onChange={readUploadFile}/>
+                    <p className='text-danger'>{errorFormat}</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => { setShowImport(false) }}>Back</Button>
-                    <Button variant="primary" onClick={() => { importList(imported) }}>Import</Button>
+                    <Button variant="primary" onClick={() => { importList(imported) }} disabled={errorFormat || !file}>Import</Button>
                 </Modal.Footer>
             </Modal>
         </div>

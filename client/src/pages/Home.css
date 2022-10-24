@@ -13,6 +13,11 @@
     margin: 5px;
 }
 
+.error-input {
+    border-color: red !important;
+    box-shadow: 0 0 0 3px rgb(255, 175, 175) !important;
+}
+
 @media (min-width: 1024px) {
     .d1 img {
         margin: auto auto 5px auto;
