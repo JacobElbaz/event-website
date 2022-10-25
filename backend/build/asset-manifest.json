@@ -1,18 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.28ce0cad.css",
-    "main.js": "/static/js/main.963792a7.js",
+    "main.css": "/static/css/main.b5e6258a.css",
+    "main.js": "/static/js/main.b2bfa4a4.js",
     "static/media/wedding.jpg": "/static/media/wedding.dc129bc8f243f7c5e3a3.jpg",
     "static/media/letter.jpg": "/static/media/letter.30f2130b51fd4e354dc8.jpg",
     "static/media/header.jpg": "/static/media/header.2811f7975d609233d39e.jpg",
     "static/media/example.png": "/static/media/example.d9ec46b474394a11511d.png",
     "static/media/carte.png": "/static/media/carte.56ed2db83530886e4dfa.png",
+    "static/media/waze.png": "/static/media/waze.c2e7f229641811b6c678.png",
+    "static/media/whatsapp.png": "/static/media/whatsapp.fdd4b7007148bcf6ce48.png",
+    "static/media/add-event.png": "/static/media/add-event.20b45b7a752dcc9a6b4f.png",
     "index.html": "/index.html",
-    "main.28ce0cad.css.map": "/static/css/main.28ce0cad.css.map",
-    "main.963792a7.js.map": "/static/js/main.963792a7.js.map"
+    "main.b5e6258a.css.map": "/static/css/main.b5e6258a.css.map",
+    "main.b2bfa4a4.js.map": "/static/js/main.b2bfa4a4.js.map"
   },
   "entrypoints": [
-    "static/css/main.28ce0cad.css",
-    "static/js/main.963792a7.js"
+    "static/css/main.b5e6258a.css",
+    "static/js/main.b2bfa4a4.js"
   ]
 }

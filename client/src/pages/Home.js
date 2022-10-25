@@ -1,9 +1,14 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState, useEffect } from 'react'
 import { Form, Button, Col, Row, Modal } from 'react-bootstrap'
 import Countdown from '../components/Countdown'
 import './Home.css'
 import { useAppContext } from '../context'
 import carte from '../images/carte.png'
+import waze from '../images/waze.png'
+import addEvent from '../images/add-event.png'
+import whatsapp from '../images/whatsapp.png'
+import { atcb_action } from 'add-to-calendar-button';
+import 'add-to-calendar-button/assets/css/atcb.css';
 
 export default function Home() {
     const brideName = 'Lauren';
@@ -19,7 +24,7 @@ export default function Home() {
     }
     const handleOnChange = e => {
         var value = e.target.value;
-        if(e.target.name == 'name'){
+        if (e.target.name == 'name') {
             const arr = value.split(" ");
             for (var i = 0; i < arr.length; i++) {
                 arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
@@ -53,10 +58,29 @@ export default function Home() {
             <div className='d1 carte' id='wedding'>
                 <h1>The Wedding</h1>
                 <img src={carte} alt="carte" />
-                <a href="https://ul.waze.com/ul?preview_venue_id=23003454.229837931.6121&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location" target={"_blank"}>Waze</a>
-                <a href='https://wa.me/972503013489' target={"_blank"}>Whatsapp</a>
+                <button className='carte-btn' onClick={() => {
+                    atcb_action({
+                        name: "Wedding Lauren and Michael",
+                        startDate: "2022-10-14",
+                        endDate: "2022-10-18",
+                        options: ['Apple', 'Google', 'iCal', 'Microsoft365', 'Outlook.com', 'Yahoo'],
+                        timeZone: "Europe/Berlin",
+                        iCalFileName: "Reminder-Event",
+                    });
+                }}>
+                    <img src={addEvent} alt=""/>
+                    Add to calendar
+                </button>
+                <a className='carte-btn' href="https://ul.waze.com/ul?preview_venue_id=23003454.229837931.6121&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location" target={"_blank"}>
+                    <img src={waze} alt="" />
+                    Waze
+                </a>
+                <a className='carte-btn' href='https://wa.me/972503013489' target={"_blank"}>
+                    <img src={whatsapp} alt="" />
+                    Whatsapp
+                    </a>
             </div>
-            
+
             <div className='d1' id='answer'>
                 <h1>Your Answer</h1>
                 <div id='form'>

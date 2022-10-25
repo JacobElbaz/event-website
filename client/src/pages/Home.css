@@ -23,7 +23,7 @@
         margin: auto auto 5px auto;
         max-height: 100vh;
     }
-    .carte a {
+    .carte-btn {
         width: 560px;
     }
     .carte {
@@ -53,23 +53,29 @@
     justify-content: center;
 }
 
-.carte a {
+.carte-btn {
     text-decoration: none;
     text-align: center;
     border: solid;
-    border-width: 0.5px;
-    color: rgb(185, 140, 140);
-    background-color:antiquewhite;
-    border-color: rgb(185, 140, 140);
+    border-width: 2px;
+    color: black;
+    background-color:white;
+    opacity: 0.6;
+    border-color: white;
     margin: 0 5px 5px 5px;
     transition-duration: 0.2s;
     line-height: 40px;
     height: 40px;
 }
 
-.carte a:hover {
-    color: white;
-    background-color: rgb(185, 140, 140);
+.carte-btn img {
+    width: 15px;
+    margin-right: 5px;
+}
+
+.carte-btn:hover {
+    opacity: 1;
+    color: black;
 }
 
 #image {
