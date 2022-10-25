@@ -17,7 +17,8 @@ As organizer (password: 12345):
 - Search guest by name/phone
 - Add new guest 
 - Edit/remove guest
-- Import/Export guest list (new)
+- Import guest list 
+- Export guest list as Excel file
 
 ## Tech Stack
 
