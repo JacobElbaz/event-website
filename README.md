@@ -8,6 +8,7 @@ This is a site where you can find all the information about an event (such as a 
 
 As guest:
 - Countdown to the event
+- Add the event to calendar
 - Waze link to the place of the event
 - Whatsapp link to contact the organizer
 - Answer form
