@@ -31,7 +31,7 @@ As organizer (password: 12345):
 
 I used Heroku for deployment. 
 
-This is a link to my deployed website: https://event-website-app.herokuapp.com/ 
+This is a link to my deployed website: https://event-react-frontend.netlify.app/
 
 ## Run Locally
 
