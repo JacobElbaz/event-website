@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-const url = "https://event-website-app.herokuapp.com"
-
 export function getGuests() {
     return new Promise(resolve => {
-        axios.get(url + "/guests")
+        axios.get("/guests")
         .then(res => res.status === 200 && res.data)
         .then(resolve)
         .catch(console.error)
@@ -13,7 +11,7 @@ export function getGuests() {
 
 export function insertGuest(body) {
     return new Promise(resolve => {
-        axios.post(url + "/guests/insert", body)
+        axios.post("/guests/insert", body)
         .then(res => res.status === 200 && res.data)
         .then(resolve)
         .catch(console.err)
@@ -22,7 +20,7 @@ export function insertGuest(body) {
 
 export function putGuest(body) {
     return new Promise(resolve => {
-        axios.put(url + "/guests/" + body._id, body)
+        axios.put("/guests/" + body._id, body)
         .then(res => res.status === 200 && res.data)
         .then(resolve)
         .catch(console.err)
@@ -30,7 +28,7 @@ export function putGuest(body) {
 }
 export function dropGuest(body) {
     return new Promise(resolve => {
-        axios.delete(url + "/guests/" + body._id, body)
+        axios.delete("/guests/" + body._id, body)
         .then(res => res.status === 200 && res.data)
         .then(resolve)
         .catch(console.err)
