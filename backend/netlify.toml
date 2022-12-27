@@ -1,0 +1,7 @@
+[build]
+    functions="index"
+
+[[redirects]]
+    to="/.netlify/src/index:splat"
+    from="/*"
+    status=200
