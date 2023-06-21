@@ -29,7 +29,7 @@ As organizer (password: 12345):
 
 ## Deployment
 
-I used Heroku for deployment. 
+I used Netlify for deployment. 
 
 This is a link to my deployed website: https://event-react-frontend.netlify.app/
 
